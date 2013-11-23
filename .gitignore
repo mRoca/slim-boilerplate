@@ -1,0 +1,15 @@
+
+/logs/*
+/cache/*
+/migrations/.dbup/applied/*
+/public/files/*
+/public/upload/*
+
+!.gitkeep
+!.htaccess
+!index.html
+
+/vendor
+/composer.lock
+
+/.idea

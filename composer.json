@@ -1,0 +1,22 @@
+{
+    "name"             : "mRoca/slim-boilerplate",
+    "description"      : "PHP SLIM server with Migration, Layout, Model, DB-MySQL and RESTFULL classes",
+    "minimum-stability": "stable",
+    "authors"          : [
+        {
+            "name" : "Michel Roca",
+            "email": "mroca.dh@gmail.com"
+        }
+    ],
+    "homepage"   : "",
+    "license"    : "MIT",
+    "require": {
+        "slim/slim": "2.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Perso\\": "lib/",
+            "Models\\": "lib/"
+        }
+    }
+}

@@ -1,0 +1,15 @@
+
+
+body {background-color: #eee;}
+
+header { text-align: center; padding: 20px; }
+header img {  }
+.main-container {max-width: 800px; margin: auto;}
+.container {max-width: 700px; margin: auto; background-color: #fff; border: 1px solid #eee; padding: 20px; border-radius: 5px; box-shadow: 1px 1px 4px #444;}
+
+.error {color: red; font-weight: bold;}
+.clearfix {clear: both;}
+
+@media (max-width: 750px) {
+    .container {margin: 0 5px;}
+}
