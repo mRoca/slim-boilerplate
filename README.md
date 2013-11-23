@@ -1,4 +1,4 @@
-# SLIM perso boilerplate
+# Slim PHP perso boilerplate
 
 This boilerplate contains:
 
@@ -10,7 +10,7 @@ This boilerplate contains:
 * Normalize.css
 * Modernizr.js
 
-# Configuration
+## Configuration
 
 To download the SLIM framework and initialize PRS0 classes autoload
 
@@ -21,7 +21,7 @@ DB parameters have to be specified in TWO files (one for the migrations and one 
 * /migrations/.dbup/properties.ini
 * /config.php
 
-# Migrations
+## Migrations
 
 The Dbup (https://github.com/brtriver/dbup) class is used to run up migrations from CLI.
 
@@ -34,10 +34,14 @@ To show migrations status :
 
     php dbup.phar status
 
-# Documentation
+## Documentation
 
 The Slim documentation is here : http://docs.slimframework.com/
 
 The Dbup documentation is here : https://github.com/brtriver/dbup and here : http://brtriver.github.io/dbup/
 
 The code MUST respect the PSR-0 standard and SHOULD respect the PSR-1 one : https://github.com/php-fig/fig-standards/tree/master/accepted/fr
+
+## Licence
+
+This boilerplate is released under the MIT public license, as the Slim Framework.
