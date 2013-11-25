@@ -1,6 +1,6 @@
 # Slim PHP perso boilerplate
 
-This boilerplate contains:
+### This boilerplate contains:
 
 * [Slim Framework](http://slimframework.com/)
 * Full layout class
@@ -10,6 +10,12 @@ This boilerplate contains:
 * RESTFULL simple class
 * Normalize.css
 * Modernizr.js
+
+### This boilerplate requires:
+
+* PHP >= 5.4
+* Composer.phar
+* CLI access
 
 ## Configuration
 
