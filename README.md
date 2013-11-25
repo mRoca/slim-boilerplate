@@ -2,7 +2,8 @@
 
 This boilerplate contains:
 
-* Layout class
+* [Slim Framework](http://slimframework.com/)
+* Full layout class
 * DB class with mysql connection
 * DB tables CRUD model
 * Migrations from .sql files (up only)
