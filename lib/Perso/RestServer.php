@@ -42,10 +42,9 @@ class RestServer
 	public function createRoutes(& $app, & $middleware = null)
 	{
 
-		if ($middleware === null) {
+		if ($middleware === null){
 			$middleware = function () {
-				return function () {
-				};
+				return function () {};
 			};
 		}
 
@@ -112,10 +111,8 @@ class RestServer
 		);
 
 		//UPDATE an object and return it
-		$app->put(
-			"/$this->collection/:id",
-			$middleware(),
-			function ($id) use ($app) {
+		$updateFunction = function() use ($app) {
+			return function ($id) use ($app) {
 				$values = $this->getInputValues($app);
 
 				if (!count($values))
@@ -134,7 +131,19 @@ class RestServer
 							self::response($obj);
 					}
 				}
-			}
+			};
+		};
+
+		$app->put(
+			"/$this->collection/:id",
+			$middleware(),
+			$updateFunction()
+		);
+
+		$app->post(
+			"/$this->collection/:id",
+			$middleware(),
+			$updateFunction()
 		);
 
 		//DELETE an object
