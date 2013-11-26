@@ -6,8 +6,8 @@ namespace Perso;
  * Automatize RESTFULL CRUD routing
  *
  * Usage:
- * 	$restCategories = new \Perso\RestServer('categories');
- * 	$restCategories->createRoutes($app, $authenticateAdmin);
+ *    $restCategories = new \Perso\RestServer('categories');
+ *    $restCategories->createRoutes($app, $authenticateAdmin);
  *
  * Class RestServer
  * @package Perso
@@ -27,12 +27,13 @@ class RestServer
 	}
 
 	public function __call($method, $args)
-    {
-        if (isset($this->$method)) {
-            $func = $this->$method;
-            return call_user_func_array($func, $args);
-        }
-    }
+	{
+		if (isset($this->$method)) {
+			$func = $this->$method;
+
+			return call_user_func_array($func, $args);
+		}
+	}
 
 	/**
 	 * @param \Slim\Slim $app
@@ -41,8 +42,12 @@ class RestServer
 	public function createRoutes(& $app, & $middleware = null)
 	{
 
-		if($middleware === null)
-			$middleware = function(){};
+		if ($middleware === null) {
+			$middleware = function () {
+				return function () {
+				};
+			};
+		}
 
 		if (!$this->collection)
 			self::error('Collection unknow');
@@ -53,7 +58,7 @@ class RestServer
 			$middleware(),
 			function () use ($app) {
 				$params = $app->request()->params();
-				if (count($params)) {					
+				if (count($params)) {
 					$model = new \Perso\Model();
 					self::response($model->read($this->collection, key($params), current($params)));
 				} else {
@@ -148,35 +153,6 @@ class RestServer
 	}
 
 	/**
-	 * Return input values : POST, PUT or RAW DATA
-	 * @param \Slim\Slim $app
-	 * @return array|mixed
-	 */
-	public static function getInput(& $app)
-	{
-		if (count($app->request->post()))
-			return $app->request->post();
-
-		if (count($app->request->put()))
-			return $app->request->put();
-
-		if (count($app->request->getBody()))
-			return json_decode($app->request->getBody(), true);
-
-		return array();
-	}
-
-	/**
-	 * Return input value passed by POST or RAW DATA (Payload)
-	 * @param \Slim\Slim $app
-	 * @return array
-	 */
-	public function getInputValues(& $app)
-	{		
-		return self::getInput($app);
-	}
-
-	/**
 	 * @param string $text
 	 * @param int $status
 	 */
@@ -255,5 +231,34 @@ class RestServer
 		);
 
 		return ($status[$code]) ? $status[$code] : $status[500];
+	}
+
+	/**
+	 * Return input value passed by POST or RAW DATA (Payload)
+	 * @param \Slim\Slim $app
+	 * @return array
+	 */
+	public function getInputValues(& $app)
+	{
+		return self::getInput($app);
+	}
+
+	/**
+	 * Return input values : POST, PUT or RAW DATA
+	 * @param \Slim\Slim $app
+	 * @return array|mixed
+	 */
+	public static function getInput(& $app)
+	{
+		if (count($app->request->post()))
+			return $app->request->post();
+
+		if (count($app->request->put()))
+			return $app->request->put();
+
+		if (count($app->request->getBody()))
+			return json_decode($app->request->getBody(), true);
+
+		return array();
 	}
 } 
