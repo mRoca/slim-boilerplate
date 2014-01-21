@@ -71,9 +71,9 @@ class LayoutView extends \Slim\View
 		$this->layoutData = $layoutData;
 	}
 
-	public function render($template)
+	public function render($template, $data = null)
 	{
-		return $this->renderLayout(parent::render($template));
+		return $this->renderLayout(parent::render($template, $data));
 	}
 
 	public function renderLayout($output)
