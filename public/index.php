@@ -65,4 +65,11 @@ $app->get('/error', function () use ($app) {
 	$app->render('error.php');
 })->name('error');
 
+//Default controller for front pages
+$app->get('/:page', function ($page) use ($app) {
+	if(file_exists("../templates/front/$page.php")){
+		$app->render("front/$page.php");
+	} else $app->notFound();
+});
+
 $app->run();
