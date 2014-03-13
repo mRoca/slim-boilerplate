@@ -8,7 +8,6 @@
             "email": "mroca.dh@gmail.com"
         }
     ],
-    "homepage"   : "",
     "license"    : "MIT",
     "require": {
         "slim/slim": "2.*",
