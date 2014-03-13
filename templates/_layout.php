@@ -17,7 +17,7 @@
 	<link rel="icon" type="image/png" href="<?= baseUrl() ?>favicon.png" />
 	-->
 
-	<title><?= isset($title) && $title ? $title : (isset($defaultTitle) ? $defaultTitle : SITE_NAME) ?></title>
+	<title><?= isset($title) && $title ? SITE_NAME . ' | ' . $title : (isset($defaultTitle) ? $defaultTitle : SITE_NAME) ?></title>
 
 	<meta name="author" content="Michel Roca" />
 

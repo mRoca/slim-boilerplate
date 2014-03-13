@@ -65,10 +65,81 @@ $app->get('/error', function () use ($app) {
 	$app->render('error.php');
 })->name('error');
 
+$app->get('/contact', function () use ($app) {
+	$data = inputGet('success') ? array('success' => inputGet('success')) : array();
+	$app->render('contact.php', $data);
+});
+
+$app->post('/contact', function () use ($app) {
+
+	$error = '';
+	$message = 'Un nouveau message a été posté sur le site '. SITE_NAME .'.<br /><br />';
+
+	if(! trim(inputPost('contact_name'))){
+		$error .= "Le champ 'Nom' est invalide.<br />";
+	}
+
+	$message .= "Nom de l'expéditeur : " . inputPost('contact_name') ."<br />";
+
+	if(! trim(inputPost('contact_company'))){
+		$error .= "Le champ 'Société' est invalide.<br />";
+	}
+
+	$message .= "Société : " . inputPost('contact_company') ."<br />";
+
+	if(! inputPost('contact_email') || ! valid_email(inputPost('contact_email'))){
+		$error .= "L'adresse mail est invalide.<br />";
+	}
+
+	$message .= "Email : " . inputPost('contact_email') ."<br />";
+
+	if(! trim(inputPost('contact_message'))){
+		$error .= "Le champ 'Message' est invalide.<br />";
+	}
+
+	$message .= "<br />------------------ Message : --------------<br /><br />";
+	$message .= nl2br(inputPost('contact_message')) ."<br />";
+
+	if (!$error) {
+		try {
+			$mailer = new SimpleMail();
+			$send   = $mailer->setTo(CONTACT_EMAIL, SITE_NAME)
+				->setSubject("[" . SITE_NAME . "] Nouveau message de contact")
+				->setFrom(CONTACT_EMAIL, SITE_NAME)
+				->addMailHeader('Reply-To', inputPost('contact_email'), inputPost('contact_name'))
+				->addGenericHeader('X-Mailer', 'PHP/' . phpversion())
+				->addGenericHeader('Content-Type', 'text/html; charset="utf-8"')
+				->setMessage($message)
+				->setWrap(100)
+				->send();
+
+			if (!$send) {
+				$error = 'Erreur lors de l\'envoi du mail';
+			}
+
+		} catch (Exception $e) {
+			$error = $e->getMessage();
+		}
+	}
+
+	if ($error)
+		$app->render('contact.php', array('error' => $error));
+	else
+		$app->redirect(uri('contact?success=1'));
+});
+
 //Default controller for front pages
 $app->get('/:page', function ($page) use ($app) {
 	if(file_exists("../templates/front/$page.php")){
 		$app->render("front/$page.php");
+	} else $app->notFound();
+});
+
+$app->get('/:folder/:page', function ($folder, $page) use ($app) {
+	$folder = str_replace('.', '', $folder);
+
+	if (file_exists("../templates/front/$folder/$page.php")) {
+		$app->render("front/$folder/$page.php");
 	} else $app->notFound();
 });
 

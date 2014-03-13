@@ -1,6 +1,7 @@
 <?php
 
 define('SITE_NAME', 'Slim Boilerplate');
+define('CONTACT_EMAIL', 'contact@deployment.com');
 
 
 //DB parameters have to be specified here AND in /migrations/.dbup/properties.ini

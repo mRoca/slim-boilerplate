@@ -110,3 +110,12 @@ function human_filesize($bytes, $decimals = 2)
 
 	return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . @$sz[$factor];
 }
+
+/**
+ * @param $address
+ * @return bool
+ */
+function valid_email($address)
+{
+	return (bool) preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $address);
+}

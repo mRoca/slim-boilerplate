@@ -11,7 +11,8 @@
     "homepage"   : "",
     "license"    : "MIT",
     "require": {
-        "slim/slim": "2.*"
+        "slim/slim": "2.*",
+        "eoghanobrien/php-simple-mail": "dev-master"
     },
     "autoload": {
         "psr-0": {
