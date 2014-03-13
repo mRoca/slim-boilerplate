@@ -70,35 +70,35 @@ $app->get('/contact', function () use ($app) {
 	$app->render('contact.php', $data);
 });
 
+
 $app->post('/contact', function () use ($app) {
 
 	$error = '';
 	$message = 'Un nouveau message a été posté sur le site '. SITE_NAME .'.<br /><br />';
 
-	if(! trim(inputPost('contact_name'))){
-		$error .= "Le champ 'Nom' est invalide.<br />";
+	$fields = array(
+		'Nom' => 'contact_name',
+		'Société' => 'contact_company',
+		'Email' => 'contact_email',
+		'Message' => 'contact_message',
+	);
+
+	foreach($fields as $fullName => $name){
+		if(! trim(inputPost($name))){
+			$error .= "Le champ $fullName' est invalide.<br />";
+		}
+
+		if($name === 'contact_email' && ! valid_email(inputPost($name))){
+			$error .= "L'adresse mail est invalide.<br />";
+		}
+
+		if($name !== 'contact_message')
+			$message .= "$fullName : <strong>" . inputPost($name) ."</strong><br />";
+		else {
+			$message .= "<br />------------------ Message : --------------<br /><br />";
+			$message .= nl2br(strip_tags(inputPost($name))) ."<br />";
+		}
 	}
-
-	$message .= "Nom de l'expéditeur : " . inputPost('contact_name') ."<br />";
-
-	if(! trim(inputPost('contact_company'))){
-		$error .= "Le champ 'Société' est invalide.<br />";
-	}
-
-	$message .= "Société : " . inputPost('contact_company') ."<br />";
-
-	if(! inputPost('contact_email') || ! valid_email(inputPost('contact_email'))){
-		$error .= "L'adresse mail est invalide.<br />";
-	}
-
-	$message .= "Email : " . inputPost('contact_email') ."<br />";
-
-	if(! trim(inputPost('contact_message'))){
-		$error .= "Le champ 'Message' est invalide.<br />";
-	}
-
-	$message .= "<br />------------------ Message : --------------<br /><br />";
-	$message .= nl2br(inputPost('contact_message')) ."<br />";
 
 	if (!$error) {
 		try {
