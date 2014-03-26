@@ -1,6 +1,6 @@
 {
-    "name"             : "mRoca/slim-boilerplate",
-    "description"      : "PHP SLIM server with Migration, Layout, Model, DB-MySQL and RESTFULL classes",
+    "name"             : "mroca/slim-boilerplate",
+    "description"      : "CHANGE THIS - PHP SLIM server with Migration, Layout, Model, DB-MySQL and RESTFULL classes",
     "minimum-stability": "stable",
     "authors"          : [
         {
@@ -8,14 +8,14 @@
             "email": "mroca.dh@gmail.com"
         }
     ],
-    "license"    : "MIT",
-    "require": {
-        "slim/slim": "2.*",
+    "license"          : "proprietary",
+    "require"          : {
+        "slim/slim"                   : "2.*",
         "eoghanobrien/php-simple-mail": "dev-master"
     },
-    "autoload": {
+    "autoload"         : {
         "psr-0": {
-            "Perso\\": "lib/",
+            "Perso\\" : "lib/",
             "Models\\": "lib/"
         }
     }
