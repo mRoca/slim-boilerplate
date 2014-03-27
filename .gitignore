@@ -9,6 +9,7 @@
 !.htaccess
 !index.html
 
+/tmp
 /vendor
 /composer.lock
 
