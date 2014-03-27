@@ -1,18 +1,21 @@
 <?php
 
-$basePath            = "./";
-$tmpDir              = "tmp/";
+$basePath = "./"; //Relative project root path
+$tmpDir   = "tmp/"; //Composer HOME for current project
+
 $composerPHARFile    = "composer.phar";
 $composerInstallFile = "composerinstall.php";
 $composerJsonFile    = "composer.json";
 $composerLockFile    = "composer.lock";
 
 $basePath                    = rtrim(realpath('../'), '/') . '/';
-$tmpDirFileFullPath          = $basePath . $tmpDir;
+$tmpDirFileFullPath          = rtrim($basePath . $tmpDir, '/') . '/';
 $composerInstallFileFullPath = $basePath . $tmpDir . $composerInstallFile;
 $composerPHARFileFullPath    = $basePath . $tmpDir . $composerPHARFile;
 $composerJsonFileFullPath    = $basePath . $composerJsonFile;
 $composerLockFileFullPath    = $basePath . $composerLockFile;
+
+$useSystemComposer = true; //Automaticaly set to false if composer cmd isn't found
 
 ####################################################################
 ####################################################################
@@ -71,6 +74,19 @@ if (!function_exists('executeCmd')) {
 	}
 }
 
+if (!function_exists('commandExists')) {
+	/**
+	 * @param string $cmd
+	 * @return bool
+	 */
+	function commandExists($cmd)
+	{
+		$returnVal = shell_exec("which $cmd");
+
+		return !empty($returnVal);
+	}
+}
+
 if (!function_exists('composerExecute')) {
 	/**
 	 * @param $cmd
@@ -81,8 +97,11 @@ if (!function_exists('composerExecute')) {
 		global $basePath;
 		global $composerPHARFileFullPath;
 		global $tmpDirFileFullPath;
+		global $useSystemComposer;
 
-		return executeCmd("cd $basePath && COMPOSER_HOME=$tmpDirFileFullPath php $composerPHARFileFullPath $cmd");
+		$composerCmd = $useSystemComposer ? "composer" : "php $composerPHARFileFullPath";
+
+		return executeCmd("cd $basePath && COMPOSER_HOME=$tmpDirFileFullPath $composerCmd --no-interaction --no-progress $cmd");
 	}
 }
 
@@ -90,34 +109,45 @@ if (!function_exists('composerExecute')) {
 ####################################################################
 
 try {
+
+	$useSystemComposer &= commandExists('composer');
+
 	if (!file_exists($composerJsonFileFullPath)) {
 		throw new Exception("File $composerJsonFileFullPath not found");
 	}
 
-	//Destination path creation
-	if (!file_exists($tmpDirFileFullPath) && !mkdir($tmpDirFileFullPath, 0777, true)) {
-		throw new Exception("Error when creating path [$tmpDirFileFullPath]");
+	//TMP path creation
+	if (!file_exists($tmpDirFileFullPath)) {
+		if (!mkdir($tmpDirFileFullPath, 0777, true)) {
+			throw new Exception("Error when creating path [$tmpDirFileFullPath]");
+		}
+		file_put_contents($tmpDirFileFullPath . '.htaccess', "Deny from All");
 	}
 
-	//Composer file downloading or updating
-	if (!file_exists($composerPHARFileFullPath)) {
-		$contentFile = get_data('https://getcomposer.org/installer');
-		if (!file_put_contents($composerInstallFileFullPath, $contentFile)) {
-			throw new Exception("Error when creating file [$composerInstallFileFullPath]");
+	if (!$useSystemComposer) {
+
+		//Composer file downloading or updating
+		if (!file_exists($composerPHARFileFullPath)) {
+			echo "Downloading & installing Composer\n";
+
+			$contentFile = get_data('https://getcomposer.org/installer');
+			if (!file_put_contents($composerInstallFileFullPath, $contentFile)) {
+				throw new Exception("Error when creating file [$composerInstallFileFullPath]");
+			}
+
+			executeCmd("php $composerInstallFileFullPath --install-dir=$tmpDirFileFullPath");
+			unlink($composerInstallFileFullPath);
 		}
 
-		executeCmd("php $composerInstallFileFullPath --install-dir=$tmpDirFileFullPath");
-		unlink($composerInstallFileFullPath);
-	}
+		//Composer file exists verification
+		if (!file_exists($composerPHARFileFullPath)) {
+			throw new Exception("File [$composerPHARFileFullPath] not found.");
+		}
 
-	//Composer file exists verification
-	if (!file_exists($composerPHARFileFullPath)) {
-		throw new Exception("File [$composerPHARFileFullPath] not found.");
-	}
-
-	//Composer update
-	if (time() - filemtime($composerPHARFileFullPath) > 10 * 24 * 3600) {
-		composerExecute('self-update');
+		//Composer update
+		if (time() - filemtime($composerPHARFileFullPath) > 10 * 24 * 3600) {
+			composerExecute('self-update');
+		}
 	}
 
 	//Go
