@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if lte IE 8]> <html class="no-js lte-ie8"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
 	<meta charset="utf-8">
@@ -21,7 +19,7 @@
 
 	<meta name="author" content="Michel Roca" />
 
-	<meta name="description" content="<?= isset($description) && $description ? $description : (isset($defaultDescription) ? $defaultDescription : '') ?>">
+	<meta name="description" content="<?= isset($description) && $description ? $description : (isset($defaultDescription) ? $defaultDescription : '') ?>" />
 	<meta name="keywords" content="<?= isset($keywords) ? $keywords : '' ?>" />
 
 	<link id="baseUrl" rel="canonical" href="<?= baseUrl() ?>" />
@@ -29,6 +27,11 @@
 	<?php if(isset($css)): foreach($css as $file): ?>
 		<link rel="stylesheet" href="<?= $file ?>" />
 	<?php endforeach; endif; ?>
+
+	<!--[if lt IE 9]>
+	<script src="<?= baseUrl() ?>js/html5shiv-printshiv-3.7.1.min.js"></script>
+	<script src="<?= baseUrl() ?>js/respond-1.4.2.min.js"></script>
+	<![endif]-->
 </head>
 <body>
 	<!--[if lt IE 8]>
