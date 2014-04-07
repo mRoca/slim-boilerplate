@@ -119,3 +119,13 @@ function valid_email($address)
 {
 	return (bool) preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $address);
 }
+
+/**
+ * @param mixed $variable
+ * @param mixed $default
+ * @return mixed
+ */
+function ifsetor(&$variable, $default = null)
+{
+	return isset($variable) ? $variable : $default;
+}
