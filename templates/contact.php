@@ -1,6 +1,5 @@
 <?php
 
-Perso\LayoutView::addJs('//maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&amp;language=fr');
 Perso\LayoutView::addJs('js/contact.js');
 
 Perso\LayoutView::setTitle('Contact');

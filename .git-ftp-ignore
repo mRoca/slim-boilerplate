@@ -1,1 +1,4 @@
+.git-ftp-ignore
 gitlabdeployment.json
+.gitignore
+README.md

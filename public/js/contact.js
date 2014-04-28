@@ -1,3 +1,10 @@
+var loadScript = function () {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&language=fr&callback=initMap';
+    document.body.appendChild(script);
+};
+
 var initMap = function () {
     var mapsDiv = document.getElementById("maps");
     if ( !mapsDiv ) return;
@@ -19,7 +26,15 @@ var initMap = function () {
             center             : new google.maps.LatLng(46.953974, 1.403366),
             mapTypeId          : google.maps.MapTypeId.ROADMAP,
             mapTypeControlStyle: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-            scrollwheel        : false
+            scrollwheel        : false,
+            styles             : [
+                {
+                    featureType: "all",
+                    stylers    : [
+                        { saturation: -100 }
+                    ]
+                }
+            ]
         }
     );
 
@@ -43,4 +58,5 @@ var initMap = function () {
     }
 };
 
-initMap();
+if ( typeof window.functionsOnLoad !== "undefined" ) window.functionsOnLoad.push(loadScript);
+else loadScript();
