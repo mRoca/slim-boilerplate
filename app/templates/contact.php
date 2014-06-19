@@ -1,6 +1,6 @@
 <?php
 
-Perso\LayoutView::addJs('js/contact.js');
+Perso\LayoutView::addJs('assets/js/contact.js');
 
 Perso\LayoutView::setTitle('Contact');
 // Perso\LayoutView::setDescription('This is my description');

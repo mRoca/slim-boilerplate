@@ -1,4 +1,5 @@
-.git-ftp-ignore
 gitlabdeployment.json
-.gitignore
+composer.json
+composer.lock
+.git-ftp-ignore
 README.md

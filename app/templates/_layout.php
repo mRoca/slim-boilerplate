@@ -29,8 +29,8 @@
 	<?php endforeach; endif; ?>
 
 	<!--[if lt IE 9]>
-	<script src="<?= baseUrl() ?>js/vendor/html5shiv-printshiv-3.7.1.min.js"></script>
-	<script src="<?= baseUrl() ?>js/vendor/respond-1.4.2.min.js"></script>
+	<script src="<?= baseUrl() ?>assets/js/vendor/html5shiv-printshiv-3.7.1.min.js"></script>
+	<script src="<?= baseUrl() ?>assets/js/vendor/respond-1.4.2.min.js"></script>
 	<![endif]-->
 </head>
 <body>

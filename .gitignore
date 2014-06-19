@@ -1,9 +1,8 @@
+/app/logs/*
+/app/cache/*
+/app/migrations/.dbup/applied/*
 
-/logs/*
-/cache/*
-/migrations/.dbup/applied/*
-/public/files/*
-/public/upload/*
+/assets/uploads/*
 
 !.gitkeep
 !.htaccess
@@ -14,3 +13,4 @@
 /composer.lock
 
 /.idea
+/nbproject

@@ -1,0 +1,41 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    Options +FollowSymlinks
+    RewriteEngine on
+
+#    RewriteCond %{HTTP_HOST} ^domainname.fr
+#    RewriteRule ^(.*)$ http://www.domainname.fr/$1 [R=permanent,L]
+
+    RewriteCond $1 !^(index\.php|assets/)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [QSA,L]
+ </IfModule>
+
+SetOutputFilter DEFLATE
+AddOutputFilterByType DEFLATE text/css text/plain text/html text/xml application/x-javascript
+
+<IfModule mod_expires.c>
+  ExpiresActive on
+  ExpiresByType text/cache-manifest       "access plus 0 seconds"
+  ExpiresByType text/html				  "access plus 0 seconds"
+  ExpiresByType image/x-icon              "access plus 1 week"
+  ExpiresByType image/gif                 "access plus 1 month"
+  ExpiresByType image/png                 "access plus 1 month"
+  ExpiresByType image/jpg                 "access plus 1 month"
+  ExpiresByType image/jpeg                "access plus 1 month"
+  ExpiresByType video/ogg                 "access plus 1 month"
+  ExpiresByType audio/ogg                 "access plus 1 month"
+  ExpiresByType video/mp4                 "access plus 1 month"
+  ExpiresByType video/webm                "access plus 1 month"
+  ExpiresByType text/css                  "access plus 1 month"
+  ExpiresByType application/javascript    "access plus 1 month"
+
+  <IfModule mod_headers.c>
+    Header append Cache-Control "public"
+  </IfModule>
+
+</IfModule>
+
+AddDefaultCharset utf-8
+AddCharset utf-8 .css .js

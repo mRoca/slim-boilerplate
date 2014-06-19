@@ -15,8 +15,8 @@
     },
     "autoload"         : {
         "psr-0": {
-            "Perso\\" : "lib/",
-            "Models\\": "lib/"
+            "Perso\\" : "app/lib/",
+            "Models\\": "app/lib/"
         }
     }
 }

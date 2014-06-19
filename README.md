@@ -25,16 +25,16 @@ To download the SLIM framework and initialize PRS0 classes autoload
 
 DB parameters have to be specified in TWO files (one for the migrations and one for the DB classes):
 
-* /migrations/.dbup/properties.ini
+* /app/migrations/.dbup/properties.ini
 * /config.php
 
 ## Migrations
 
 The Dbup (https://github.com/brtriver/dbup) class is used to run up migrations from CLI.
 
-Create a new SQL file named V999__xxxx.sql in /migrations/sql/, then run the following command :
+Create a new SQL file named V999__xxxx.sql in /app/migrations/sql/, then run the following command :
 
-    cd migrations
+    cd app/migrations
     php dbup.phar up
 
 To show migrations status :
