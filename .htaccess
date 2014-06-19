@@ -1,5 +1,7 @@
 Options -Indexes
 
+ErrorDocument 404 404.html
+
 <IfModule mod_rewrite.c>
     Options +FollowSymlinks
     RewriteEngine on
