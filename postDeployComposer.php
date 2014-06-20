@@ -8,7 +8,7 @@ $composerInstallFile = "composerinstall.php";
 $composerJsonFile    = "composer.json";
 $composerLockFile    = "composer.lock";
 
-$basePath                    = rtrim(realpath('../'), '/') . '/';
+$basePath                    = rtrim(realpath($basePath), '/') . '/';
 $tmpDirFileFullPath          = rtrim($basePath . $tmpDir, '/') . '/';
 $composerInstallFileFullPath = $basePath . $tmpDir . $composerInstallFile;
 $composerPHARFileFullPath    = $basePath . $tmpDir . $composerPHARFile;
