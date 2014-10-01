@@ -130,7 +130,7 @@ $app->post('/contact', function () use ($app) {
 
 //Default controller for front pages
 $app->get('/:page', function ($page) use ($app) {
-	if(file_exists("../templates/front/$page.php")){
+	if(file_exists("./app/templates/front/$page.php")){
 		$app->render("front/$page.php");
 	} else $app->notFound();
 });
@@ -138,7 +138,7 @@ $app->get('/:page', function ($page) use ($app) {
 $app->get('/:folder/:page', function ($folder, $page) use ($app) {
 	$folder = str_replace('.', '', $folder);
 
-	if (file_exists("../templates/front/$folder/$page.php")) {
+	if (file_exists("./app/templates/front/$folder/$page.php")) {
 		$app->render("front/$folder/$page.php");
 	} else $app->notFound();
 });

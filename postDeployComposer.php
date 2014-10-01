@@ -40,7 +40,7 @@ if (!function_exists('get_data')) {
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); //TODO secure that, possibility of man of the middle attack
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); //TODO secure that
 		$data = curl_exec($ch);
 
 		$error = curl_error($ch);
