@@ -11,11 +11,11 @@
     "license"          : "proprietary",
     "require"          : {
         "slim/slim"                   : "2.*",
-        "eoghanobrien/php-simple-mail": "dev-master"
+        "eoghanobrien/php-simple-mail": "1.4.*"
     },
     "autoload"         : {
         "psr-0": {
-            "Perso\\" : "app/lib/",
+            "SlimBoilerplate\\" : "app/lib/",
             "Models\\": "app/lib/"
         }
     }

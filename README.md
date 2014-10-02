@@ -47,7 +47,7 @@ The Slim documentation is here : http://docs.slimframework.com/
 
 The Dbup documentation is here : https://github.com/brtriver/dbup and here : http://brtriver.github.io/dbup/
 
-The code MUST respect the PSR-0 standard and SHOULD respect the PSR-1 one : https://github.com/php-fig/fig-standards/tree/master/accepted/fr
+The code MUST respect the PSR-0 standard and SHOULD respect the PSR-1 one : https://github.com/php-fig/fig-standards/tree/master/accepted/
 
 ## Licence
 

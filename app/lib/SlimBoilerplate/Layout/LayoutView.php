@@ -1,8 +1,10 @@
 <?php
 
-namespace Perso;
+namespace SlimBoilerplate\Layout;
 
-class LayoutView extends \Slim\View
+use Slim\View;
+
+class LayoutView extends View
 {
 	public static $template_vars = array(
 		'title'              => '',
@@ -25,12 +27,19 @@ class LayoutView extends \Slim\View
 
 	public static function addCss($css)
 	{
+        if(strpos($css, 'http') === false)
+            $css = baseUrl() . $css;
+
 		static::$template_vars['css'][] = $css;
 	}
 
 	public static function addJs($js, $callback = '')
 	{
+        if(strpos($js, 'http') === false)
+            $js = baseUrl() . $js;
+
 		static::$template_vars['js'][] = $js;
+
 		if ($callback)
 			static::$template_vars['jsCallback'][$js] = $callback;
 	}

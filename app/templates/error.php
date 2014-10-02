@@ -1,6 +1,6 @@
 <?php
-	 Perso\LayoutView::setTitle('Error');
-	 Perso\LayoutView::setDescription('Error page');
+	 SlimBoilerplate\Layout\LayoutView::setTitle('Error');
+	 SlimBoilerplate\Layout\LayoutView::setDescription('Error page');
 ?>
 
 <div>

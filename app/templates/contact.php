@@ -1,10 +1,10 @@
 <?php
 
-Perso\LayoutView::addJs('assets/js/contact.js');
+SlimBoilerplate\Layout\LayoutView::addJs('assets/js/contact.js');
 
-Perso\LayoutView::setTitle('Contact');
-// Perso\LayoutView::setDescription('This is my description');
-// Perso\LayoutView::setKeywords('This, is, my, keywords');
+SlimBoilerplate\Layout\LayoutView::setTitle('Contact');
+// SlimBoilerplate\Layout\LayoutView::setDescription('This is my description');
+// SlimBoilerplate\Layout\LayoutView::setKeywords('This, is, my, keywords');
 
 ?>
 

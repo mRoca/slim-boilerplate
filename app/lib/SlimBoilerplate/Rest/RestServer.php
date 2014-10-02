@@ -1,12 +1,14 @@
 <?php
 
-namespace Perso;
+namespace SlimBoilerplate\Rest;
+
+use SlimBoilerplate\Dbal\TableModel;
 
 /**
  * Automatize RESTFULL CRUD routing
  *
  * Usage:
- *    $restCategories = new \Perso\RestServer('categories');
+ *    $restCategories = new \SlimBoilerplate\RestServer('categories');
  *    $restCategories->createRoutes($app, $authenticateAdmin);
  *
  * Class RestServer
@@ -33,6 +35,8 @@ class RestServer
 
 			return call_user_func_array($func, $args);
 		}
+
+		return null;
 	}
 
 	/**
@@ -42,9 +46,10 @@ class RestServer
 	public function createRoutes(& $app, & $middleware = null)
 	{
 
-		if ($middleware === null){
+		if ($middleware === null) {
 			$middleware = function () {
-				return function () {};
+				return function () {
+				};
 			};
 		}
 
@@ -57,12 +62,13 @@ class RestServer
 			$middleware(),
 			function () use ($app) {
 				$params = $app->request()->params();
-				if (count($params)) {
-					$model = new \Perso\Model();
-					self::response($model->read($this->collection, key($params), current($params)));
-				} else {
-					$model = new TableModel($this->collection);
-					self::response($model->readAll());
+				$model = new TableModel($this->collection);
+
+				try {
+					$items = count($params) ? $model->read(key($params), current($params)) : $model->readAll();
+					self::response($items);
+				} catch (\Exception $e) {
+					self::error($e->getMessage());
 				}
 			}
 		);
@@ -73,12 +79,18 @@ class RestServer
 			$middleware(),
 			function ($id) use ($app) {
 				$model = new TableModel($this->collection);
-				$obj   = $model->readById($id);
 
-				if (!is_array($obj) || !count($obj))
-					self::error('Item not found', 404);
-				else
-					self::response($obj);
+				try {
+					$obj = $model->readById($id);
+
+					if (!is_array($obj) || !count($obj))
+						self::error('Item not found', 404);
+					else
+						self::response($obj);
+
+				} catch (\Exception $e) {
+					self::error($e->getMessage());
+				}
 			}
 		);
 
@@ -94,24 +106,29 @@ class RestServer
 					self::error('No input data', 400);
 				else {
 					$model = new TableModel($this->collection);
-					$newId = $model->create($values);
 
-					if (!intval($newId))
-						self::error('Error inserting object');
-					else {
-						$obj = $model->readById($newId);
+					try {
+						$newId = $model->create($values);
 
-						if (!is_array($obj) || !count($obj))
-							self::error('New item not found', 404);
-						else
-							self::response($obj);
+						if (!intval($newId))
+							self::error('Error inserting object');
+						else {
+							$obj = $model->readById($newId);
+
+							if (!is_array($obj) || !count($obj))
+								self::error('New item not found', 404);
+							else
+								self::response($obj);
+						}
+					} catch (\Exception $e) {
+						self::error($e->getMessage());
 					}
 				}
 			}
 		);
 
 		//UPDATE an object and return it
-		$updateFunction = function() use ($app) {
+		$updateFunction = function () use ($app) {
 			return function ($id) use ($app) {
 				$values = $this->getInputValues($app);
 
@@ -120,15 +137,19 @@ class RestServer
 				else {
 					$model = new TableModel($this->collection);
 
-					if (!$model->updateById($id, $values))
-						self::error('Error updating object');
-					else {
-						$obj = $model->readById($id);
+					try {
+						if (!$model->updateById($id, $values))
+							self::error('Error updating object');
+						else {
+							$obj = $model->readById($id);
 
-						if (!is_array($obj) || !count($obj))
-							self::error('Updated item not found', 404);
-						else
-							self::response($obj);
+							if (!is_array($obj) || !count($obj))
+								self::error('Updated item not found', 404);
+							else
+								self::response($obj);
+						}
+					} catch (\Exception $e) {
+						self::error($e->getMessage());
 					}
 				}
 			};

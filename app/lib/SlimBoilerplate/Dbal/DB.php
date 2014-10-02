@@ -1,17 +1,14 @@
 <?php
 
-namespace Perso;
+namespace SlimBoilerplate\Dbal;
 
 use \PDO;
-
-require_once(dirname(__FILE__) . '/../../config.php');
+use SlimBoilerplate\Exception\DbalException;
 
 class DB
 {
 
-	/**
-	 * @var DB
-	 */
+	/** @var DB */
 	private static $singleton = null;
 	protected $type = DB_TYPE;
 	protected $host = DB_HOST;
@@ -19,9 +16,8 @@ class DB
 	protected $user = DB_USER;
 	protected $pass = DB_PASSWORD;
 	protected $connectionDone = false;
-	/**
-	 * @var PDO
-	 */
+
+	/** @var PDO */
 	protected $pdoObj = null;
 
 	private function __construct()
@@ -29,9 +25,7 @@ class DB
 
 	}
 
-	/**
-	 * @return DB
-	 */
+	/** @return DB */
 	public static function getInstance()
 	{
 		if (self::$singleton === null) {
@@ -92,8 +86,8 @@ class DB
 	{
 		try {
 			$pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-			$this->pdoObj                   = new PDO($this->type . ':host=' . $this->host . ';dbname=' . $this->base . '', $this->user, $this->pass, $pdo_options);
-			$this->connectionDone           = true;
+			$this->pdoObj = new PDO($this->type . ':host=' . $this->host . ';dbname=' . $this->base . '', $this->user, $this->pass, $pdo_options);
+			$this->connectionDone = true;
 
 			return true;
 
@@ -109,10 +103,11 @@ class DB
 	 * Display an error
 	 *
 	 * @param string $text
+	 * @throws DbalException
 	 */
 	protected function error($text = '')
 	{
-		die('Database lib error : ' . $text);
+		throw new DbalException('Database lib error : ' . $text);
 	}
 
 	/**

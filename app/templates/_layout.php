@@ -44,6 +44,7 @@
 
 	<section class="main-container">
 		<div class="container">
+            <p><a href="<?= url('/') ?>">Home</a></p>
 			<?= $output ?>
 		</div>
 	</section>

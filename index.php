@@ -9,7 +9,7 @@ require_once './vendor/autoload.php';
 require_once './config.php';
 
 //Add some helpers
-require_once './app/lib/Perso/SlimHelpers.php';
+require_once './app/lib/SlimBoilerplate/SlimHelpers.php';
 
 
 // ########################################
@@ -38,7 +38,7 @@ $app->configureMode('development', function () use ($app) {
 
 //Use the layout class if not Ajax request
 if (!$app->request()->isAjax()) {
-	$app->view(new Perso\LayoutView());
+	$app->view(new SlimBoilerplate\Layout\LayoutView());
 
 	$app->notFound(function () use ($app) {
 		include("404.html");
@@ -48,14 +48,21 @@ if (!$app->request()->isAjax()) {
 // ########################################
 // ###### DEFAULT LAYOUT CONFIG ###########
 
-Perso\LayoutView::addCss('assets/css/vendor/normalize.min.css');
-Perso\LayoutView::addCss('assets/css/style.css');
-Perso\LayoutView::addJs('assets/js/vendor/modernizr-2.6.2-custom.min.js');
-//Perso\LayoutView::setDefaultDescription('Slim PHP boilerplate');
+SlimBoilerplate\Layout\LayoutView::addCss('assets/css/vendor/normalize.min.css');
+SlimBoilerplate\Layout\LayoutView::addCss('assets/css/style.css');
+SlimBoilerplate\Layout\LayoutView::addJs('assets/js/vendor/modernizr-2.6.2-custom.min.js');
+//SlimBoilerplate\Layout\LayoutView::setDefaultDescription('Slim PHP boilerplate');
 
 
 // ########################################
 // ############### ROUTES #################
+
+// REST API
+// Very simple Rest server for the "account" sql table
+$restAccounts = new \SlimBoilerplate\Rest\RestServer('account');
+$restAccounts->createRoutes($app);
+
+// HTML
 
 $app->get('/', function () use ($app) {
 	$app->render('home.php');
@@ -70,40 +77,39 @@ $app->get('/contact', function () use ($app) {
 	$app->render('contact.php', $data);
 });
 
-
 $app->post('/contact', function () use ($app) {
 
 	$error = '';
-	$message = 'Un nouveau message a été posté sur le site '. SITE_NAME .'.<br /><br />';
+	$message = 'Un nouveau message a été posté sur le site ' . SITE_NAME . '.<br /><br />';
 
 	$fields = array(
-		'Nom' => 'contact_name',
+		'Nom'     => 'contact_name',
 		'Société' => 'contact_company',
-		'Email' => 'contact_email',
+		'Email'   => 'contact_email',
 		'Message' => 'contact_message',
 	);
 
-	foreach($fields as $fullName => $name){
-		if(! trim(inputPost($name))){
+	foreach ($fields as $fullName => $name) {
+		if (!trim(inputPost($name))) {
 			$error .= "Le champ $fullName' est invalide.<br />";
 		}
 
-		if($name === 'contact_email' && ! valid_email(inputPost($name))){
+		if ($name === 'contact_email' && !valid_email(inputPost($name))) {
 			$error .= "L'adresse mail est invalide.<br />";
 		}
 
-		if($name !== 'contact_message')
-			$message .= "$fullName : <strong>" . inputPost($name) ."</strong><br />";
+		if ($name !== 'contact_message')
+			$message .= "$fullName : <strong>" . inputPost($name) . "</strong><br />";
 		else {
 			$message .= "<br />------------------ Message : --------------<br /><br />";
-			$message .= nl2br(strip_tags(inputPost($name))) ."<br />";
+			$message .= nl2br(strip_tags(inputPost($name))) . "<br />";
 		}
 	}
 
 	if (!$error) {
 		try {
 			$mailer = new SimpleMail();
-			$send   = $mailer->setTo(CONTACT_EMAIL, SITE_NAME)
+			$send = $mailer->setTo(CONTACT_EMAIL, SITE_NAME)
 				->setSubject("[" . SITE_NAME . "] Nouveau message de contact")
 				->setFrom(CONTACT_EMAIL, SITE_NAME)
 				->addMailHeader('Reply-To', inputPost('contact_email'), inputPost('contact_name'))
@@ -130,13 +136,16 @@ $app->post('/contact', function () use ($app) {
 
 //Default controller for front pages
 $app->get('/:page', function ($page) use ($app) {
-	if(file_exists("./app/templates/front/$page.php")){
+	$page = preg_replace('/[^0-9a-zA-Z\-_+]/', '', $page);
+
+	if (file_exists("./app/templates/front/$page.php")) {
 		$app->render("front/$page.php");
 	} else $app->notFound();
 });
 
 $app->get('/:folder/:page', function ($folder, $page) use ($app) {
-	$folder = str_replace('.', '', $folder);
+	$page = preg_replace('/[^0-9a-zA-Z\-_+]/', '', $page);
+	$folder = preg_replace('/[^0-9a-zA-Z\-_+]/', '', $folder);
 
 	if (file_exists("./app/templates/front/$folder/$page.php")) {
 		$app->render("front/$folder/$page.php");

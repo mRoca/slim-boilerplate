@@ -1,6 +1,6 @@
 <?php
 
-namespace Perso;
+namespace SlimBoilerplate\Dbal;
 
 class Model
 {
@@ -35,20 +35,19 @@ class Model
 
 	/**
 	 * Do a SELECT * FROM $table WHERE $column = '$value'
-	 *
 	 * @param $table
-	 * @param $column
-	 * @param $columnValue
+	 * @param string $whereColumn
+	 * @param mixed $whereColumnValue
 	 * @param bool $first
 	 * @return array
 	 */
-	public function read($table, $column = '', $columnValue = null, $first = false)
+	public function read($table, $whereColumn = '', $whereColumnValue = null, $first = false)
 	{
-		if ($column && $columnValue) {
+		if ($whereColumn && $whereColumnValue !== null) {
 			return $this->db->query("SELECT *
 								FROM $table
-								WHERE $column = ?
-								" . ($first ? " LIMIT 1" : ''), $columnValue);
+								WHERE $whereColumn = ?
+								" . ($first ? " LIMIT 1" : ''), $whereColumnValue);
 		} else {
 			return $this->db->query("SELECT * FROM $table");
 		}
@@ -64,18 +63,17 @@ class Model
 	 */
 	public function insert($table, $values = array(), $valuesUnescaped = array())
 	{
-		//TODO Verify if the columns exists in the db
-		$columns          = array();
-		$columnsKeys      = array();
+		$columns = array();
+		$columnsKeys = array();
 		$columnsUnescaped = array();
 
 		foreach ($values as $c => $val) {
-			$columns[]          = "`$c`";
+			$columns[] = "`$c`";
 			$columnsKeys[":$c"] = $val;
 		}
 
 		foreach ($valuesUnescaped as $c => $val) {
-			$columns[]          = "`$c`";
+			$columns[] = "`$c`";
 			$columnsUnescaped[] = $val;
 		}
 
@@ -84,8 +82,8 @@ class Model
 
 		$vals = array_merge(array_keys($columnsKeys), $columnsUnescaped);
 
-		$sql = 'INSERT INTO `' . $table . '` (' . implode(', ', $columns) . ')
-				VALUES (' . implode(', ', $vals) . ')';
+		$sql = "INSERT INTO `$table` (" . implode(', ', $columns) . ")
+				VALUES (" . implode(', ', $vals) . ")";
 
 		return $this->db->executeWithBinaryFiles($sql, $columnsKeys);
 	}
@@ -102,11 +100,11 @@ class Model
 	 */
 	public function update($table, $column, $columnValue, $values = array(), $valuesUnescaped = array())
 	{
-		$set            = array();
+		$set = array();
 		$valuesToEscape = array();
 
 		foreach ($values as $c => $val) {
-			$set[]            = "`$c` = ?";
+			$set[] = "`$c` = ?";
 			$valuesToEscape[] = $val;
 		}
 
@@ -117,7 +115,7 @@ class Model
 		if (empty($set))
 			return false;
 
-		$sql              = 'UPDATE `' . $table . '` SET ' . implode(', ', $set) . ' WHERE `' . $column . '` = ?';
+		$sql = "UPDATE `$table` SET " . implode(', ', $set) . " WHERE `$column` = ?";
 		$valuesToEscape[] = $columnValue;
 
 		return $this->db->exec($sql, $valuesToEscape);
@@ -135,7 +133,7 @@ class Model
 	{
 		$valuesToEscape = array();
 
-		$sql              = 'DELETE FROM `' . $table . '` WHERE `' . $column . '` = ?';
+		$sql = "DELETE FROM `$table` WHERE `$column` = ?";
 		$valuesToEscape[] = $columnValue;
 
 		return $this->db->exec($sql, $valuesToEscape);
@@ -151,16 +149,27 @@ class Model
 	 */
 	public function deleteIn($table, $column, $columnValues)
 	{
-		if(! count($columnValues))
+		if (!count($columnValues))
 			return false;
 
-		$sql = 'DELETE FROM `' . $table . '` WHERE `' . $column . '` IN (' . implode(',', $columnValues) . ')';
+		$sql = "DELETE FROM `$table` WHERE `$column` IN (" . implode(',', $columnValues) . ")";
 
 		return $this->db->exec($sql);
 	}
 
 	/**
-	 * @return \Perso\DB
+	 * Do a SHOW COLUMNS FROM $table
+	 *
+	 * @param $table
+	 * @return array
+	 */
+	public function showColums($table)
+	{
+		return $this->db->query("SHOW COLUMNS FROM `$table`");
+	}
+
+	/**
+	 * @return DB
 	 */
 	public function getDb()
 	{
@@ -168,7 +177,7 @@ class Model
 	}
 
 	/**
-	 * @param \Perso\DB $db
+	 * @param DB $db
 	 */
 	public function setDb($db)
 	{

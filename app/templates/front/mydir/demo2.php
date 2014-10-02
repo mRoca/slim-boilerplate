@@ -9,4 +9,4 @@ SlimBoilerplate\Layout\LayoutView::setKeywords('This, is, my, keywords');
 ?>
 
 
-<h2>Hello, DEMO</h2>
+<h2>Hello, DEMO 2</h2>
